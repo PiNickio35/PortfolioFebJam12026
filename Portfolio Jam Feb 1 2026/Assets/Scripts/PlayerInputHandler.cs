@@ -14,16 +14,22 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private string rotation = "Rotation";
     [SerializeField] private string jump = "Jump";
     [SerializeField] private string sprint = "Sprint";
+    [SerializeField] private string checkList = "CheckList";
+    
+    [Header("Script References")]
+    [SerializeField] private ChecklistManager checkListManager;
     
     private InputAction _movementAction;
     private InputAction _rotationAction;
     private InputAction _jumpAction;
     private InputAction _sprintAction;
+    private InputAction _checkListAction;
     
     public Vector2 MovementInput { get; private set; }
     public Vector2 RotationInput { get; private set; }
     public bool JumpTriggered { get; private set; }
     public bool SprintTriggered { get; private set; }
+    public bool CheckListTriggered { get; private set; }
 
     private void Awake()
     {
@@ -33,6 +39,7 @@ public class PlayerInputHandler : MonoBehaviour
         _rotationAction = mapReference.FindAction(rotation);
         _jumpAction = mapReference.FindAction(jump);
         _sprintAction = mapReference.FindAction(sprint);
+        _checkListAction = mapReference.FindAction(checkList);
         
         SubscribeActionValuesToInputEvents();
     }
@@ -60,5 +67,7 @@ public class PlayerInputHandler : MonoBehaviour
         
         _sprintAction.performed += _ => SprintTriggered = true;
         _sprintAction.canceled += _ => SprintTriggered = false;
+        
+        _checkListAction.performed += ctx => checkListManager.ToggleChecklist(ctx);
     }
 }
