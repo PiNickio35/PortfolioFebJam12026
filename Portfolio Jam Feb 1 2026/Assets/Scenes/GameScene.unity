@@ -637,7 +637,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 781645205}
@@ -1155,7 +1155,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3849515317806274240, guid: 5190d43403f3f314e9f33d11e1825f06, type: 3}
       propertyPath: m_text
-      value: '- Say "hi" to anomaly'
+      value: '- Say hi to anomaly'
       objectReference: {fileID: 0}
     - target: {fileID: 3849515317806274240, guid: 5190d43403f3f314e9f33d11e1825f06, type: 3}
       propertyPath: m_fontSize
