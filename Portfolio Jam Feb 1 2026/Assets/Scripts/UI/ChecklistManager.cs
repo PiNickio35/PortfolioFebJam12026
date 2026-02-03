@@ -2,8 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// TODO: Add win checker
-
 public class ChecklistManager : MonoBehaviour 
 {
     [Header("References")]
@@ -16,7 +14,8 @@ public class ChecklistManager : MonoBehaviour
     private bool listVisible = false;
     private Vector3 slideDir;
     
-    void Update() {
+    void Update()
+    {
         AnimateChecklist();
     }
 
@@ -35,6 +34,10 @@ public class ChecklistManager : MonoBehaviour
     public void CheckOff(int taskId) 
     {
         tasks[taskId].fontStyle = FontStyles.Strikethrough;
+        if (taskId == tasks.Length) {
+            // TODO: What happens when you win
+            Debug.Log("Player won!");
+        }
     }
 
     void AnimateChecklist()
