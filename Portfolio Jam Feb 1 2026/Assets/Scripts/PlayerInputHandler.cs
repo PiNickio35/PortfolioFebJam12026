@@ -7,9 +7,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private InputActionAsset playerControls;
 
     [Header("Action Map Name Reference")] 
-    [SerializeField] private string playerActionMapName = "Player";
-
-    [SerializeField] string uiActionMapName = "UI";
+    [SerializeField] private string actionMapName = "Player";
     
     [Header("Action Name References")]
     [SerializeField] private string movement = "Movement";
@@ -34,31 +32,29 @@ public class PlayerInputHandler : MonoBehaviour
     public bool JumpTriggered { get; private set; }
     public bool SprintTriggered { get; private set; }
     public bool InteractTriggered { get; private set; }
-    public bool CheckListTriggered { get; private set; }
 
     private void Awake()
     {
-        InputActionMap playerMapReference = playerControls.FindActionMap(playerActionMapName);
-        InputActionMap uiMapReference = playerControls.FindActionMap(uiActionMapName);
+        InputActionMap mapReference = playerControls.FindActionMap(actionMapName);
         
-        _movementAction = playerMapReference.FindAction(movement);
-        _rotationAction = playerMapReference.FindAction(rotation);
-        _jumpAction = playerMapReference.FindAction(jump);
-        _sprintAction = playerMapReference.FindAction(sprint);
-        _interactAction = playerMapReference.FindAction(interact);
-        _checkListAction = uiMapReference.FindAction(checkList);
+        _movementAction = mapReference.FindAction(movement);
+        _rotationAction = mapReference.FindAction(rotation);
+        _jumpAction = mapReference.FindAction(jump);
+        _sprintAction = mapReference.FindAction(sprint);
+        _interactAction = mapReference.FindAction(interact);
+        _checkListAction = mapReference.FindAction(checkList);
         
         SubscribeActionValuesToInputEvents();
     }
 
     private void OnEnable()
     {
-        playerControls.FindActionMap(playerActionMapName).Enable();
+        playerControls.FindActionMap(actionMapName).Enable();
     }
 
     private void OnDisable()
     {
-        playerControls.FindActionMap(playerActionMapName).Disable();
+        playerControls.FindActionMap(actionMapName).Disable();
     }
 
     private void SubscribeActionValuesToInputEvents()
