@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -22,15 +23,19 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 _currentMovement;
     private float _verticalRotation;
     private float CurrentSpeed => walkSpeed * (playerInputHandler.SprintTriggered ? sprintMultiplier : 1.0f);
+    
+    private bool _isPaused;
 
     private void Start()
     {
+        playerInputHandler.onPause.AddListener(PauseMovement);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update()
     {
+        if (_isPaused) return;
         HandleRotation();
         HandleMovement();
     }
@@ -87,5 +92,10 @@ public class FirstPersonController : MonoBehaviour
         Vector3 inputDirection = new Vector3(playerInputHandler.MovementInput.x, 0, playerInputHandler.MovementInput.y);
         Vector3 worldDirection = transform.TransformDirection(inputDirection);
         return worldDirection.normalized;
+    }
+
+    private void PauseMovement()
+    {
+        _isPaused = !_isPaused;
     }
 }
