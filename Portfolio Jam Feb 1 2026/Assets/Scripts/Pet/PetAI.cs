@@ -93,14 +93,14 @@ public class PetAI : MonoBehaviour
         // TODO: Not working, will fix soon
         Debug.Log("Floating");
         inEvent = true;
-        // modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
+        modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
         
         // model.transform.DOMove(model.transform.position + new Vector3(0, 1, 0), 5);
         // yield return new WaitForSeconds(15);
         // model.transform.DOMove(transform.position, 2);
         yield return new WaitForSeconds(3);
         
-        // modelRb.constraints =  RigidbodyConstraints.None;
+        modelRb.constraints =  RigidbodyConstraints.None;
         currentState = State.Idle;
         inEvent = false;
     }

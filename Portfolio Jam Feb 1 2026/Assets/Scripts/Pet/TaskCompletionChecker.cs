@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class TaskCompletionChecker : MonoBehaviour {
@@ -8,7 +9,7 @@ public class TaskCompletionChecker : MonoBehaviour {
     [Header("References")]
     [SerializeField] private ChecklistManager checklistManager;
     [SerializeField] private InteractionController interactionController;
-    [SerializeField] private GameObject correctFood;
+    [SerializeField] private GameObject[] correctFoods;
     [SerializeField] private GameObject litterbox;
     [SerializeField] private GameObject bed;
     
@@ -16,7 +17,7 @@ public class TaskCompletionChecker : MonoBehaviour {
     {
         if (interactionController.heldObject != col.gameObject) return;
         
-        if (col.gameObject == correctFood)
+        if (correctFoods.Contains(col.gameObject))
         {
             Debug.Log("Correct food given");
             interactionController.DropObject();

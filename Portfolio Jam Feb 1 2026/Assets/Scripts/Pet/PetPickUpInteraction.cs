@@ -26,7 +26,7 @@ public class PetPickUpInteraction : BaseInteractable {
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 1);
+        return Physics.Raycast(transform.position, Vector3.down, 0.6f);
     }
 
     IEnumerator QueueAgentReenable()
