@@ -23,12 +23,24 @@ public class PetPickUpInteraction : BaseInteractable {
         }
     }
 
-    IEnumerator QueueAgentReenable() {
-        yield return new WaitForSeconds(1f);
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1);
+    }
+
+    IEnumerator QueueAgentReenable()
+    {
+        bool isGrounded = false;
+        while (!isGrounded)
+        {
+            isGrounded = IsGrounded();
+            yield return new WaitForSeconds(1f);
+        }
         agent.Warp(transform.position);
         transform.SetParent(parent);
         transform.DORotate(parent.transform.rotation.eulerAngles, 1f);
         transform.DOMove(parent.transform.position, 1f);
+        yield return new WaitForSeconds(1f);
         petAi.currentState = PetAI.State.Idle;
     }
 }
