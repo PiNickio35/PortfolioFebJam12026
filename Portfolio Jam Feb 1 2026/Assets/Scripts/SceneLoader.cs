@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,7 +23,7 @@ public class SceneLoader : MonoBehaviour
     
     private static void SwitchScene(int sceneIndex)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        SceneManager.LoadScene(sceneIndex);
     }
     public void SwitchWithTransition(int sceneIndex)
     {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private string jump = "Jump";
     [SerializeField] private string sprint = "Sprint";
     [SerializeField] private string interact = "Interact";
+    [SerializeField] private string pause = "Pause";
     [SerializeField] private string checkList = "CheckList";
     
     [Header("Script References")]
@@ -25,6 +27,7 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction _jumpAction;
     private InputAction _sprintAction;
     private InputAction _interactAction;
+    private InputAction _pauseAction;
     private InputAction _checkListAction;
     
     public Vector2 MovementInput { get; private set; }
@@ -32,6 +35,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool JumpTriggered { get; private set; }
     public bool SprintTriggered { get; private set; }
     public bool InteractTriggered { get; private set; }
+    public UnityEvent onPause;
 
     private void Awake()
     {
@@ -42,6 +46,7 @@ public class PlayerInputHandler : MonoBehaviour
         _jumpAction = mapReference.FindAction(jump);
         _sprintAction = mapReference.FindAction(sprint);
         _interactAction = mapReference.FindAction(interact);
+        _pauseAction = mapReference.FindAction(pause);
         _checkListAction = mapReference.FindAction(checkList);
         
         SubscribeActionValuesToInputEvents();
@@ -73,6 +78,8 @@ public class PlayerInputHandler : MonoBehaviour
         
         _interactAction.started += _ => InteractTriggered = true;
         _interactAction.canceled += _ => InteractTriggered = false;
+        
+        _pauseAction.started += _ => onPause.Invoke();
         
         _checkListAction.performed += ctx => checkListManager.ToggleChecklist(ctx);
     }
