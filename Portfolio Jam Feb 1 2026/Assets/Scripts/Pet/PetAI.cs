@@ -1,10 +1,7 @@
 using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using Sequence = DG.Tweening.Sequence;
 
 public class PetAI : MonoBehaviour 
 {
@@ -12,7 +9,6 @@ public class PetAI : MonoBehaviour
     {
         Idle,
         Event,
-        Pet,
         PickedUp
     }
     public State currentState;
@@ -21,12 +17,22 @@ public class PetAI : MonoBehaviour
     [SerializeField] private int randomMoveRadius;
     [SerializeField] private float randomMoveDelay;
     bool idling;
-    bool spinning;
+    
+    [Header("Animation Parameters")]
+    [SerializeField] private float hopForce;
+    private bool inEvent = false;
     
     [Header("References")]
     public NavMeshAgent agent;
     [SerializeField] private GameObject model;
+    [SerializeField] private GameObject player;
+    private Rigidbody modelRb;
 
+    void Awake()
+    {
+        modelRb = model.GetComponent<Rigidbody>();
+    }
+    
     void Start() 
     {
         currentState = State.Idle;
@@ -65,15 +71,38 @@ public class PetAI : MonoBehaviour
                 StartCoroutine(SetRandomTarget());
                 break;
             case State.Event:
-                if (spinning) return;
+                if (inEvent) return;
+                int ranEvent = Random.Range(0, 3);
+                ranEvent = 0;       // TODO: Remove this when more events added
                 agent.enabled = false;
-                StartCoroutine(PlaySpinAnimation());
+                switch (ranEvent)
+                {
+                    case 0:
+                        StartCoroutine(Float());
+                        break;
+                }
                 break;
-            case State.Pet:
             case State.PickedUp:
                 agent.enabled = false;
                 break;
         }
+    }
+    
+    IEnumerator Float()
+    {
+        // TODO: Not working, will fix soon
+        Debug.Log("Floating");
+        inEvent = true;
+        // modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
+        
+        // model.transform.DOMove(model.transform.position + new Vector3(0, 1, 0), 5);
+        // yield return new WaitForSeconds(15);
+        // model.transform.DOMove(transform.position, 2);
+        yield return new WaitForSeconds(3);
+        
+        // modelRb.constraints =  RigidbodyConstraints.None;
+        currentState = State.Idle;
+        inEvent = false;
     }
     
     IEnumerator SetRandomTarget()
@@ -82,11 +111,10 @@ public class PetAI : MonoBehaviour
         while (idling) 
         {
             yield return new WaitForSeconds(randomMoveDelay);
-            // Random event checking
             bool isRandomEvent = Random.Range(0, 20) == 1;
             if (!idling) { break; }
-            else if (isRandomEvent) { currentState = State.Event; break; }
-            
+            if (isRandomEvent) { currentState = State.Event; break; }
+
             bool stayStill = Random.Range(0, 3) == 1;
             if (stayStill) continue;
             
@@ -99,26 +127,5 @@ public class PetAI : MonoBehaviour
             transform.DOLookAt(finalTarget, 0.25f);
             agent.SetDestination(finalTarget);
         }
-    }
-
-    IEnumerator PlaySpinAnimation()
-    {
-        // TODO: Maybe use a sequence instead..? This isn't really working
-        Debug.Log("Spin animation");
-        Vector3 floatHeight = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
-        spinning = true;
-        
-        model.transform.SetParent(null);
-        
-        // model.transform.DOMove(floatHeight, 0.5f);
-        // yield return new WaitForSeconds(0.5f);
-        // model.transform.DORotate(new Vector3(0, 85, 0), 0.5f).SetLoops(3).SetEase(Ease.Linear);
-        // yield return new WaitForSeconds(1.5f);
-        
-        model.transform.SetParent(transform);
-        // model.transform.DOMove(transform.position, 0.25f);
-        yield return new WaitForSeconds(0.25f);
-        // model.transform.DORotate(transform.rotation.eulerAngles, 0.25f);
-        currentState = State.Idle;
     }
 }

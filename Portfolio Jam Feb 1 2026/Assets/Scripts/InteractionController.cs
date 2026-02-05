@@ -21,7 +21,20 @@ public class InteractionController : MonoBehaviour
 
     private void Update()
     {
-        if (DoInteractionTest(out IInteractable interactable))
+        if (heldObject != null)
+        {
+            MoveObject();
+            
+            if (playerInputHandler.InteractTriggered != _isClick)
+            {
+                _isClick = playerInputHandler.InteractTriggered;
+                if (_isClick)
+                {
+                    _lastHitObject.Interact(this);
+                }
+            }
+        }
+        else if (DoInteractionTest(out IInteractable interactable))
         {
             if (interactable.CanInteract())
             {
@@ -44,11 +57,6 @@ public class InteractionController : MonoBehaviour
         {
             interactionPrompt.SetActive(false);
         }
-
-        if (heldObject != null)
-        {
-            MoveObject();
-        }
     }
 
     private void InteractableInSight(IInteractable interactable)
@@ -57,8 +65,7 @@ public class InteractionController : MonoBehaviour
         interactable.OnFocusEnter();
     }
 
-    private void InteractableOutOfSight(IInteractable interactable)
-    {
+    private void InteractableOutOfSight(IInteractable interactable) {
         interactionPrompt.SetActive(false);
         interactable.OnFocusExit();
     }

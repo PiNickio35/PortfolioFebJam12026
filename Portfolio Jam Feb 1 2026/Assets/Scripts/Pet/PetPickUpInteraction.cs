@@ -14,6 +14,7 @@ public class PetPickUpInteraction : BaseInteractable {
         if (interactor.heldObject == null)
         {
             StopCoroutine(QueueAgentReenable());
+            transform.DOKill();
             interactor.PickUpObject(transform.gameObject);
         }
         else
@@ -38,7 +39,7 @@ public class PetPickUpInteraction : BaseInteractable {
         }
         agent.Warp(transform.position);
         transform.SetParent(parent);
-        transform.DORotate(parent.transform.rotation.eulerAngles, 1f);
+        transform.DORotateQuaternion(parent.transform.rotation, 1f);
         transform.DOMove(parent.transform.position, 1f);
         yield return new WaitForSeconds(1f);
         petAi.currentState = PetAI.State.Idle;
