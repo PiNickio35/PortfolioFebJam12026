@@ -54,7 +54,7 @@ public class PetAI : MonoBehaviour
     {
         if (idling && model.transform.parent != gameObject.transform)
         {
-            currentState = State.Ragdoll;    
+            currentState = State.Ragdoll;
         }
         
         if (idling && currentState != State.Idle)
@@ -68,7 +68,7 @@ public class PetAI : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                if (!agent.enabled) { agent.enabled = true; }
+                if (!agent.enabled) { agent.enabled = true; modelRb.constraints = RigidbodyConstraints.None; }
                 if (idling) return;
                 StartCoroutine(SetRandomTarget());
                 break;
@@ -80,29 +80,28 @@ public class PetAI : MonoBehaviour
                 switch (ranEvent)
                 {
                     case 0:
-                        StartCoroutine(Float());
+                        StartCoroutine(AnimateFloat());
                         break;
                 }
                 break;
             case State.Ragdoll:
                 agent.enabled = false;
+                modelRb.constraints = RigidbodyConstraints.None;
                 break;
         }
     }
 
     public void AlignAgentWithModel()
     {
+        modelRb.constraints = RigidbodyConstraints.FreezeAll;
         agent.Warp(model.transform.position);
         model.transform.SetParent(transform);
-        model.transform.DOKill();
         model.transform.DORotateQuaternion(transform.transform.rotation, 1f);
         model.transform.DOMove(transform.transform.position, 1f);
     }
     
-    IEnumerator Float()
+    IEnumerator AnimateFloat()
     {
-        // TODO: Not working, will fix soon
-        Debug.Log("Floating");
         inEvent = true;
         modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
         

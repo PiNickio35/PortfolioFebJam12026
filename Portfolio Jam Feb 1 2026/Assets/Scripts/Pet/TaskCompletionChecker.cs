@@ -67,8 +67,8 @@ public class TaskCompletionChecker : MonoBehaviour {
     {
         GameObject foodObject = foodCol.gameObject;
         Rigidbody foodRb = foodObject.GetComponent<Rigidbody>();
-        petAi.currentState = PetAI.State.Ragdoll;
         rb.constraints = RigidbodyConstraints.FreezeAll;
+        petAi.currentState = PetAI.State.Ragdoll;
         
         // Drop and look at food
         interactionController.DropObject();
@@ -81,13 +81,14 @@ public class TaskCompletionChecker : MonoBehaviour {
         
         // Eat food
         anim.SetBool("isEating", true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.25f);
         foodObject.SetActive(false);
         
         // Realign
+        yield return new WaitForSeconds(4f);
         petAi.AlignAgentWithModel();
+        yield return new WaitForSeconds(2f);
         anim.SetBool("isEating", false);
-        yield return new WaitForSeconds(1f);
         rb.constraints =  RigidbodyConstraints.None;
         petAi.currentState = PetAI.State.Idle;
         StartCoroutine(checklistManager.ShowCheckoff(1));
