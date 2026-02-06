@@ -4,10 +4,8 @@ using Interactions;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PetPickUpInteraction : BaseInteractable {
+public class PetInteraction : BaseInteractable {
     [SerializeField] private PetAI petAi;
-    [SerializeField] private Transform parent;
-    [SerializeField] private NavMeshAgent agent;
     
     public override void Interact(InteractionController interactor)
     {
@@ -37,10 +35,8 @@ public class PetPickUpInteraction : BaseInteractable {
             isGrounded = IsGrounded();
             yield return new WaitForSeconds(1f);
         }
-        agent.Warp(transform.position);
-        transform.SetParent(parent);
-        transform.DORotateQuaternion(parent.transform.rotation, 1f);
-        transform.DOMove(parent.transform.position, 1f);
+
+        petAi.AlignAgentWithModel();
         yield return new WaitForSeconds(1f);
         petAi.currentState = PetAI.State.Idle;
     }

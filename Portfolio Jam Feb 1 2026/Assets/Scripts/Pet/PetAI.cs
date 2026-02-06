@@ -9,7 +9,7 @@ public class PetAI : MonoBehaviour
     {
         Idle,
         Event,
-        PickedUp
+        Ragdoll
     }
     public State currentState;
     
@@ -52,7 +52,7 @@ public class PetAI : MonoBehaviour
     {
         if (idling && model.transform.parent != gameObject.transform)
         {
-            currentState = State.PickedUp;    
+            currentState = State.Ragdoll;    
         }
         
         if (idling && currentState != State.Idle)
@@ -82,10 +82,18 @@ public class PetAI : MonoBehaviour
                         break;
                 }
                 break;
-            case State.PickedUp:
+            case State.Ragdoll:
                 agent.enabled = false;
                 break;
         }
+    }
+
+    public void AlignAgentWithModel()
+    {
+        agent.Warp(model.transform.position);
+        model.transform.SetParent(transform);
+        model.transform.DORotateQuaternion(transform.transform.rotation, 1f);
+        model.transform.DOMove(transform.transform.position, 1f);
     }
     
     IEnumerator Float()
@@ -95,12 +103,16 @@ public class PetAI : MonoBehaviour
         inEvent = true;
         modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
         
-        // model.transform.DOMove(model.transform.position + new Vector3(0, 1, 0), 5);
-        // yield return new WaitForSeconds(15);
-        // model.transform.DOMove(transform.position, 2);
+        model.transform.DOMove(model.transform.position + new Vector3(0, 1, 0), 5);
+        yield return new WaitForSeconds(15);
+        modelRb.constraints =  RigidbodyConstraints.None;
+        model.transform.DOKill();
         yield return new WaitForSeconds(3);
         
-        modelRb.constraints =  RigidbodyConstraints.None;
+        agent.Warp(model.transform.position);
+        model.transform.DORotateQuaternion(transform.rotation, 1f);
+        model.transform.DOMove(transform.position, 1f);
+        yield return new WaitForSeconds(1f);
         currentState = State.Idle;
         inEvent = false;
     }

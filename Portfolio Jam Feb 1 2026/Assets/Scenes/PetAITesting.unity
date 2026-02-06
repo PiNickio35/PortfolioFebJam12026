@@ -155,11 +155,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3849515317806274240, guid: 5190d43403f3f314e9f33d11e1825f06, type: 3}
       propertyPath: m_text
-      value: '- Clean anomaly'
+      value: '- Take anomaly to potty'
       objectReference: {fileID: 0}
     - target: {fileID: 4061454029007314947, guid: 5190d43403f3f314e9f33d11e1825f06, type: 3}
       propertyPath: m_Name
-      value: Clean
+      value: Potty
       objectReference: {fileID: 0}
     - target: {fileID: 7001782250485551027, guid: 5190d43403f3f314e9f33d11e1825f06, type: 3}
       propertyPath: m_Pivot.x
@@ -2997,8 +2997,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PetPickUpInteraction
   petAi: {fileID: 806221942}
-  parent: {fileID: 806221941}
-  agent: {fileID: 806221943}
 --- !u!135 &1338162865
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3018,7 +3016,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1338162866
 MonoBehaviour:
@@ -3035,6 +3033,7 @@ MonoBehaviour:
   throwForce: 10
   checklistManager: {fileID: 5310048748988898526}
   interactionController: {fileID: 330585549}
+  petAi: {fileID: 806221942}
   correctFoods:
   - {fileID: 919063111}
   - {fileID: 919063110}
