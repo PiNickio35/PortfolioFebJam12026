@@ -17,9 +17,9 @@ public class PetAI : MonoBehaviour
     [SerializeField] private int randomMoveRadius;
     [SerializeField] private float randomMoveDelay;
     bool idling;
-    
+
     [Header("Animation Parameters")]
-    [SerializeField] private float hopForce;
+    [SerializeField] private Animator anim;
     private bool inEvent = false;
     
     [Header("References")]
@@ -43,6 +43,8 @@ public class PetAI : MonoBehaviour
         CheckPickUp();
         ProcessState();
 
+        anim.SetBool("isMoving", agent.velocity.magnitude > 0);
+        
         if (!idling) return;
         model.transform.position = transform.position;
         model.transform.rotation = transform.rotation;
@@ -92,6 +94,7 @@ public class PetAI : MonoBehaviour
     {
         agent.Warp(model.transform.position);
         model.transform.SetParent(transform);
+        model.transform.DOKill();
         model.transform.DORotateQuaternion(transform.transform.rotation, 1f);
         model.transform.DOMove(transform.transform.position, 1f);
     }
@@ -109,10 +112,8 @@ public class PetAI : MonoBehaviour
         model.transform.DOKill();
         yield return new WaitForSeconds(3);
         
-        agent.Warp(model.transform.position);
-        model.transform.DORotateQuaternion(transform.rotation, 1f);
-        model.transform.DOMove(transform.position, 1f);
-        yield return new WaitForSeconds(1f);
+        AlignAgentWithModel();
+        yield return new WaitForSeconds(3f);
         currentState = State.Idle;
         inEvent = false;
     }

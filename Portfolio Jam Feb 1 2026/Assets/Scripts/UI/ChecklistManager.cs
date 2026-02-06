@@ -13,6 +13,7 @@ public class ChecklistManager : MonoBehaviour
     
     [Header("Animation Parameters")]
     [SerializeField] private int slideSpeed;
+    [SerializeField] private int outY;
     private bool listVisible = false;
     private Vector3 slideDir;
 
@@ -65,7 +66,7 @@ public class ChecklistManager : MonoBehaviour
 
     void AnimateChecklist()
     {
-        if ((listVisible && transform.localPosition.y < 0) || (!listVisible && transform.localPosition.y > -Screen.height * 3))
+        if ((listVisible && transform.localPosition.y < 0) || (!listVisible && transform.localPosition.y > outY))
         {
             transform.Translate(slideDir * (Screen.height * slideSpeed * Time.deltaTime));
         }

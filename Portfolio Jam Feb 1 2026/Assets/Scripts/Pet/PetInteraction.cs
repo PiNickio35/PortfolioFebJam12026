@@ -24,7 +24,7 @@ public class PetInteraction : BaseInteractable {
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.6f);
+        return Physics.Raycast(transform.position, Vector3.down, 1);
     }
 
     IEnumerator QueueAgentReenable()
@@ -37,7 +37,7 @@ public class PetInteraction : BaseInteractable {
         }
 
         petAi.AlignAgentWithModel();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         petAi.currentState = PetAI.State.Idle;
     }
 }

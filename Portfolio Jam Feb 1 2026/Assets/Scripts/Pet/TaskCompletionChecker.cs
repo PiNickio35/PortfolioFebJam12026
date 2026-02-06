@@ -16,10 +16,17 @@ public class TaskCompletionChecker : MonoBehaviour {
     
     [Header("References")]
     [SerializeField] private PetAI petAi;
+    [SerializeField] private Animator anim;
     [SerializeField] private ChecklistManager checklistManager;
     [SerializeField] private InteractionController interactionController;
     [SerializeField] private Complications  complications;
+    private Rigidbody rb;
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+    
     void CheckIfComplicationApplies()
     {
         switch (frustration) {
@@ -59,19 +66,29 @@ public class TaskCompletionChecker : MonoBehaviour {
     IEnumerator EatAnimation(Collider foodCol)
     {
         GameObject foodObject = foodCol.gameObject;
+        Rigidbody foodRb = foodObject.GetComponent<Rigidbody>();
         petAi.currentState = PetAI.State.Ragdoll;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        
+        // Drop and look at food
+        interactionController.DropObject();
+        foodCol.enabled = false;
+        foodRb.useGravity = false;
+        foodRb.constraints = RigidbodyConstraints.FreezeAll;
         
         transform.DOLookAt(foodObject.transform.position, 0.5f);
         yield return new WaitForSeconds(0.5f);
         
-        interactionController.DropObject();
-        foodCol.enabled = false;
-        foodObject.GetComponent<Rigidbody>().useGravity = false;
-        foodObject.transform.DOMove(transform.position, 3f);
-        yield return new WaitForSeconds(4f);
+        // Eat food
+        anim.SetBool("isEating", true);
+        yield return new WaitForSeconds(1f);
         foodObject.SetActive(false);
         
+        // Realign
         petAi.AlignAgentWithModel();
+        anim.SetBool("isEating", false);
+        yield return new WaitForSeconds(1f);
+        rb.constraints =  RigidbodyConstraints.None;
         petAi.currentState = PetAI.State.Idle;
         StartCoroutine(checklistManager.ShowCheckoff(1));
     }
