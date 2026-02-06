@@ -7,6 +7,7 @@ using UnityEngine;
 public class TaskCompletionChecker : MonoBehaviour {
     [Header("Reaction Parameters")]
     [SerializeField] private float throwForce;
+    private int frustration = 0;
     
     [Header("Task Items References")]
     [SerializeField] private GameObject[] correctFoods;
@@ -17,6 +18,23 @@ public class TaskCompletionChecker : MonoBehaviour {
     [SerializeField] private PetAI petAi;
     [SerializeField] private ChecklistManager checklistManager;
     [SerializeField] private InteractionController interactionController;
+    [SerializeField] private Complications  complications;
+
+    void CheckIfComplicationApplies()
+    {
+        switch (frustration) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 4:
+                if (!complications.lostEye.activeInHierarchy) { complications.LoseEye(); }
+                break;
+            case 6:
+                Debug.Log("Death");
+                break;
+        }
+    }
     
     void OnTriggerEnter(Collider col)
     {
@@ -32,7 +50,10 @@ public class TaskCompletionChecker : MonoBehaviour {
             Debug.Log("Wrong food given");
             interactionController.DropObject();
             col.gameObject.GetComponent<Rigidbody>().AddForce(-(transform.position - col.gameObject.transform.position).normalized * throwForce,  ForceMode.Impulse);
+            frustration++;
         }
+        
+        CheckIfComplicationApplies();
     }
 
     IEnumerator EatAnimation(Collider foodCol)
