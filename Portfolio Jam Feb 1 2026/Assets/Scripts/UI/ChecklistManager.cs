@@ -6,23 +6,25 @@ using UnityEngine.InputSystem;
 
 public class ChecklistManager : MonoBehaviour 
 {
-    [Header("References")]
-    [SerializeField] private PlayerInputHandler playerInputHandler;
-    [SerializeField] private TextMeshProUGUI[] tasks;
-    private bool[] isChecked;
-    
     [Header("Animation Parameters")]
     [SerializeField] private int slideSpeed;
     [SerializeField] private int outY;
     private bool listVisible = false;
     private Vector3 slideDir;
-
-    protected bool canSleep = false;
-    protected bool canPoop = true;
+    
+    [Header("CheckOff Conditions")]
+    protected internal bool canSleep = false;
+    protected internal bool canPoop = false;
+    
+    [Header("References")]
+    [SerializeField] private PlayerInputHandler playerInputHandler;
+    [SerializeField] private TextMeshProUGUI[] tasks;
+    protected internal bool[] isChecked;
 
     void Start()
     {
         isChecked = new bool[tasks.Length];
+        CheckOff(2);    // TODO: Remove this
     }
     
     void Update()
@@ -32,7 +34,8 @@ public class ChecklistManager : MonoBehaviour
 
     public void ToggleChecklist(InputAction.CallbackContext ctx) 
     {
-        if (listVisible) {
+        if (listVisible) 
+        {
             listVisible = false;
             slideDir = Vector3.down;
         }
@@ -47,18 +50,21 @@ public class ChecklistManager : MonoBehaviour
         tasks[taskId].fontStyle = FontStyles.Strikethrough;
         isChecked[taskId] = true;
         
-        if (canPoop && taskId == 3) {
-            // TODO: Poop animation
+        if (canPoop && taskId == 3)
+        {
             canPoop = false;
         }
         
-        if (isChecked[tasks.Length - 1]) {
+        if (isChecked[tasks.Length - 1])
+        {
             // TODO: What happens when you win
             Debug.Log("Player won!");
         }
-        else {
+        else
+        {
             int numChecked = isChecked.Count(check => check);
-            if (numChecked == tasks.Length - 1) {
+            if (numChecked == tasks.Length - 1)
+            {
                 canSleep = true;
             }
         }
@@ -72,7 +78,8 @@ public class ChecklistManager : MonoBehaviour
         }
     }
 
-    public IEnumerator ShowCheckoff(int taskId) {
+    public IEnumerator ShowCheckoff(int taskId)
+    {
         if (isChecked[taskId]) yield break;
         listVisible = true;
         slideDir = Vector3.up;

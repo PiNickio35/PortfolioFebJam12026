@@ -7,6 +7,7 @@ public class PetAI : MonoBehaviour
 {
     public enum State
     {
+        Standby,
         Idle,
         Event,
         Ragdoll
@@ -23,9 +24,10 @@ public class PetAI : MonoBehaviour
     private bool inEvent = false;
     
     [Header("References")]
-    public NavMeshAgent agent;
+    [SerializeField] private PetInteraction petInteraction;
     [SerializeField] private GameObject model;
     [SerializeField] private GameObject player;
+    public NavMeshAgent agent;
     private Rigidbody modelRb;
 
     void Awake()
@@ -35,7 +37,7 @@ public class PetAI : MonoBehaviour
     
     void Start() 
     {
-        currentState = State.Idle;
+        currentState = State.Standby;
     }
 
     void Update()
@@ -52,7 +54,7 @@ public class PetAI : MonoBehaviour
 
     void CheckPickUp() 
     {
-        if (idling && model.transform.parent != gameObject.transform)
+        if ((idling || currentState == State.Standby) && model.transform.parent != gameObject.transform)
         {
             currentState = State.Ragdoll;
         }
@@ -67,20 +69,33 @@ public class PetAI : MonoBehaviour
     {
         switch (currentState)
         {
+            case State.Standby:
+                agent.enabled = false;
+                modelRb.constraints = RigidbodyConstraints.FreezeAll;
+                modelRb.useGravity = false;
+                break;
             case State.Idle:
-                if (!agent.enabled) { agent.enabled = true; modelRb.constraints = RigidbodyConstraints.None; }
+                if (!agent.enabled)
+                {
+                    agent.enabled = true;
+                    modelRb.constraints = RigidbodyConstraints.None;
+                    modelRb.useGravity = true;
+                }
                 if (idling) return;
                 StartCoroutine(SetRandomTarget());
                 break;
             case State.Event:
                 if (inEvent) return;
-                int ranEvent = Random.Range(0, 3);
-                ranEvent = 0;       // TODO: Remove this when more events added
+                int ranEvent = Random.Range(0, 2);
+                petInteraction.canPickUp = false;
                 agent.enabled = false;
                 switch (ranEvent)
                 {
                     case 0:
                         StartCoroutine(AnimateFloat());
+                        break;
+                    case 1:
+                        StartCoroutine(StareAtPlayer());
                         break;
                 }
                 break;
@@ -114,6 +129,24 @@ public class PetAI : MonoBehaviour
         AlignAgentWithModel();
         yield return new WaitForSeconds(3f);
         currentState = State.Idle;
+        petInteraction.canPickUp = true;
+        inEvent = false;
+    }
+
+    IEnumerator StareAtPlayer()
+    {
+        inEvent = true;
+        modelRb.constraints =  RigidbodyConstraints.FreezePosition;
+        
+        model.transform.DOLookAt(player.transform.position, 1f);
+        anim.SetBool("isYawning", true);
+        yield return new WaitForSeconds(8f);
+        anim.SetBool("isYawning", false);
+        
+        AlignAgentWithModel();
+        yield return new WaitForSeconds(3f);
+        currentState = State.Idle;
+        petInteraction.canPickUp = true;
         inEvent = false;
     }
     

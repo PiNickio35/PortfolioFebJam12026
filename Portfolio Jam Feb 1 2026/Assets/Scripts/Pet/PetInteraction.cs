@@ -6,17 +6,23 @@ using UnityEngine.AI;
 
 public class PetInteraction : BaseInteractable {
     [SerializeField] private PetAI petAi;
+    [SerializeField] private ChecklistManager checklistManager;
+    
+    protected internal bool canPickUp = true;
     
     public override void Interact(InteractionController interactor)
     {
-        if (interactor.heldObject == null)
+        if (interactor.heldObject == null && canPickUp)
         {
+            if (!checklistManager.isChecked[0]) { StartCoroutine(checklistManager.ShowCheckoff(0)); }
+            
             StopCoroutine(QueueAgentReenable());
             transform.DOKill();
             interactor.PickUpObject(transform.gameObject);
         }
-        else
+        else if (canPickUp)
         {
+            canPickUp = false;
             interactor.DropObject();
             StartCoroutine(QueueAgentReenable());
         }
@@ -38,6 +44,7 @@ public class PetInteraction : BaseInteractable {
         
         petAi.AlignAgentWithModel();
         yield return new WaitForSeconds(3f);
+        canPickUp = true;
         petAi.currentState = PetAI.State.Idle;
     }
 }
