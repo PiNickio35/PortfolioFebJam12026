@@ -11,7 +11,6 @@ public class InteractionController : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private PlayerInputHandler playerInputHandler;
-    [SerializeField] private GameObject interactionPrompt;
     
     private Rigidbody _heldObjectRigidBody;
     private bool _isClick;
@@ -40,10 +39,6 @@ public class InteractionController : MonoBehaviour
                 InteractableOutOfSight(interactable);
             }
         }
-        else
-        {
-            interactionPrompt.SetActive(false);
-        }
 
         if (heldObject != null)
         {
@@ -53,13 +48,11 @@ public class InteractionController : MonoBehaviour
 
     private void InteractableInSight(IInteractable interactable)
     {
-        interactionPrompt.SetActive(true);
         interactable.OnFocusEnter();
     }
 
     private void InteractableOutOfSight(IInteractable interactable)
     {
-        interactionPrompt.SetActive(false);
         interactable.OnFocusExit();
     }
 
