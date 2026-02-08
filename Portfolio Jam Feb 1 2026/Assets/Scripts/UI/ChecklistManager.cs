@@ -13,18 +13,18 @@ public class ChecklistManager : MonoBehaviour
     private Vector3 slideDir;
     
     [Header("CheckOff Conditions")]
-    protected internal bool canSleep = false;
     protected internal bool canPoop = false;
+    protected internal bool canSleep = false;
     
     [Header("References")]
     [SerializeField] private PlayerInputHandler playerInputHandler;
+    [SerializeField] private GameObject prompt;
     [SerializeField] private TextMeshProUGUI[] tasks;
     protected internal bool[] isChecked;
 
     void Start()
     {
         isChecked = new bool[tasks.Length];
-        CheckOff(2);    // TODO: Remove this
     }
     
     void Update()
@@ -40,6 +40,7 @@ public class ChecklistManager : MonoBehaviour
             slideDir = Vector3.down;
         }
         else {
+            if (prompt.activeInHierarchy) { prompt.SetActive(false); }
             listVisible = true;
             slideDir = Vector3.up;
         }
@@ -81,6 +82,7 @@ public class ChecklistManager : MonoBehaviour
     public IEnumerator ShowCheckoff(int taskId)
     {
         if (isChecked[taskId]) yield break;
+        if (prompt.activeInHierarchy) { prompt.SetActive(false); }
         listVisible = true;
         slideDir = Vector3.up;
         yield return new WaitForSeconds(1f);

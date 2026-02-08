@@ -54,7 +54,7 @@ public class TaskCompletion : MonoBehaviour {
             StartCoroutine(SleepAnimation());
         }
         
-        if (interactionController.heldObject != col.gameObject) return;
+        if (interactionController.heldObject != col.gameObject || petAi.inEvent) return;
         if (correctFoods.Contains(col.gameObject))
         {
             Debug.Log("Correct food given");
@@ -66,9 +66,8 @@ public class TaskCompletion : MonoBehaviour {
             interactionController.DropObject();
             col.gameObject.GetComponent<Rigidbody>().AddForce(-(transform.position - col.gameObject.transform.position).normalized * throwForce,  ForceMode.Impulse);
             frustration++;
+            CheckIfComplicationApplies();
         }
-        
-        CheckIfComplicationApplies();
     }
 
     IEnumerator EatAnimation(Collider foodCol)
@@ -95,12 +94,12 @@ public class TaskCompletion : MonoBehaviour {
         // Realign
         yield return new WaitForSeconds(2f);
         petAi.AlignAgentWithModel();
-        yield return new WaitForSeconds(2f);
+        StartCoroutine(checklistManager.ShowCheckoff(1));
         anim.SetBool("isEating", false);
-        petAi.currentState = PetAI.State.Idle;
+        yield return new WaitForSeconds(2f);
+        petAi.currentState = PetAI.State.Play;
         petInteraction.canPickUp = true;
         checklistManager.canPoop = true;
-        StartCoroutine(checklistManager.ShowCheckoff(1));
     }
 
     IEnumerator PoopAnimation()
@@ -115,10 +114,6 @@ public class TaskCompletion : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         candyPoop.SetActive(true);
         yield return new WaitForSeconds(1f);
-        
-        // Move off of bowl
-        transform.DOMove(transform.position + transform.forward * 2 - new Vector3(0, 0.15f, 0), 1f);
-        yield return new WaitForSeconds(2f);
         
         // Realign
         petAi.AlignAgentWithModel();

@@ -10,7 +10,8 @@ public class PetAI : MonoBehaviour
         Standby,
         Idle,
         Event,
-        Ragdoll
+        Ragdoll,
+        Play
     }
     public State currentState;
     
@@ -21,13 +22,17 @@ public class PetAI : MonoBehaviour
 
     [Header("Animation Parameters")]
     [SerializeField] private Animator anim;
-    private bool inEvent = false;
+    protected internal bool inEvent = false;
+    protected internal bool hiding = false;
     
     [Header("References")]
     [SerializeField] private PetInteraction petInteraction;
     [SerializeField] private GameObject model;
     [SerializeField] private GameObject player;
     public NavMeshAgent agent;
+    [SerializeField] private ParticleSystem whoosh;
+
+    [SerializeField] private GameObject[] hidingSpots;
     private Rigidbody modelRb;
 
     void Awake()
@@ -54,7 +59,7 @@ public class PetAI : MonoBehaviour
 
     void CheckPickUp() 
     {
-        if ((idling || currentState == State.Standby) && model.transform.parent != gameObject.transform)
+        if ((idling || hiding) && model.transform.parent != gameObject.transform)
         {
             currentState = State.Ragdoll;
         }
@@ -72,14 +77,12 @@ public class PetAI : MonoBehaviour
             case State.Standby:
                 agent.enabled = false;
                 modelRb.constraints = RigidbodyConstraints.FreezeAll;
-                modelRb.useGravity = false;
                 break;
             case State.Idle:
                 if (!agent.enabled)
                 {
                     agent.enabled = true;
                     modelRb.constraints = RigidbodyConstraints.None;
-                    modelRb.useGravity = true;
                 }
                 if (idling) return;
                 StartCoroutine(SetRandomTarget());
@@ -103,6 +106,16 @@ public class PetAI : MonoBehaviour
                 agent.enabled = false;
                 modelRb.constraints = RigidbodyConstraints.None;
                 break;
+            case State.Play:
+                if (hiding) return;
+                hiding = true;
+                
+                int ranSpot = Random.Range(0, hidingSpots.Length);
+                agent.enabled = false;
+                modelRb.constraints = RigidbodyConstraints.FreezeAll;
+                whoosh.Play();
+                model.transform.position = hidingSpots[ranSpot].transform.position;
+                break;
         }
     }
 
@@ -121,7 +134,7 @@ public class PetAI : MonoBehaviour
         modelRb.constraints =  RigidbodyConstraints.FreezeRotation;
         
         model.transform.DOMove(model.transform.position + new Vector3(0, 1, 0), 5);
-        yield return new WaitForSeconds(15);
+        yield return new WaitForSeconds(8f);
         modelRb.constraints =  RigidbodyConstraints.None;
         model.transform.DOKill();
         yield return new WaitForSeconds(3);
@@ -140,7 +153,7 @@ public class PetAI : MonoBehaviour
         
         model.transform.DOLookAt(player.transform.position, 1f);
         anim.SetBool("isYawning", true);
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(4f);
         anim.SetBool("isYawning", false);
         
         AlignAgentWithModel();
