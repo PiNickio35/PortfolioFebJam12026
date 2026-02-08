@@ -60,7 +60,7 @@ public class ChecklistManager : MonoBehaviour
         else
         {
             int numChecked = isChecked.Count(check => check);
-            if (numChecked == tasks.Length - 2)
+            if (numChecked == 3)
             {
                 canSleep = true;
             }
