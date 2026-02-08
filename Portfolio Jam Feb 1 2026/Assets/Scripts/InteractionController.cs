@@ -11,6 +11,7 @@ public class InteractionController : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private PlayerInputHandler playerInputHandler;
+    [SerializeField] private GameObject interactionPrompt;
     
     private Rigidbody _heldObjectRigidBody;
     private bool _isClick;
@@ -20,7 +21,20 @@ public class InteractionController : MonoBehaviour
 
     private void Update()
     {
-        if (DoInteractionTest(out IInteractable interactable))
+        if (heldObject != null)
+        {
+            MoveObject();
+            
+            if (playerInputHandler.InteractTriggered != _isClick)
+            {
+                _isClick = playerInputHandler.InteractTriggered;
+                if (_isClick)
+                {
+                    _lastHitObject.Interact(this);
+                }
+            }
+        }
+        else if (DoInteractionTest(out IInteractable interactable))
         {
             if (interactable.CanInteract())
             {
@@ -39,20 +53,20 @@ public class InteractionController : MonoBehaviour
                 InteractableOutOfSight(interactable);
             }
         }
-
-        if (heldObject != null)
+        else
         {
-            MoveObject();
+            interactionPrompt.SetActive(false);
         }
     }
 
     private void InteractableInSight(IInteractable interactable)
     {
+        interactionPrompt.SetActive(true);
         interactable.OnFocusEnter();
     }
 
-    private void InteractableOutOfSight(IInteractable interactable)
-    {
+    private void InteractableOutOfSight(IInteractable interactable) {
+        interactionPrompt.SetActive(false);
         interactable.OnFocusExit();
     }
 

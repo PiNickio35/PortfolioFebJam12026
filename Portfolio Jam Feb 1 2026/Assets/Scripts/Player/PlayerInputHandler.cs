@@ -17,6 +17,10 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private string sprint = "Sprint";
     [SerializeField] private string interact = "Interact";
     [SerializeField] private string pause = "Pause";
+    [SerializeField] private string checkList = "CheckList";
+    
+    [Header("Script References")]
+    [SerializeField] private ChecklistManager checkListManager;
     
     private InputAction _movementAction;
     private InputAction _rotationAction;
@@ -24,6 +28,7 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction _sprintAction;
     private InputAction _interactAction;
     private InputAction _pauseAction;
+    private InputAction _checkListAction;
     
     public Vector2 MovementInput { get; private set; }
     public Vector2 RotationInput { get; private set; }
@@ -42,6 +47,7 @@ public class PlayerInputHandler : MonoBehaviour
         _sprintAction = mapReference.FindAction(sprint);
         _interactAction = mapReference.FindAction(interact);
         _pauseAction = mapReference.FindAction(pause);
+        _checkListAction = mapReference.FindAction(checkList);
         
         SubscribeActionValuesToInputEvents();
     }
@@ -74,5 +80,7 @@ public class PlayerInputHandler : MonoBehaviour
         _interactAction.canceled += _ => InteractTriggered = false;
         
         _pauseAction.started += _ => onPause.Invoke();
+        
+        _checkListAction.performed += ctx => checkListManager.ToggleChecklist(ctx);
     }
 }
