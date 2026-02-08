@@ -15,17 +15,14 @@ public class PetInteraction : BaseInteractable {
         if (interactor.heldObject == null && canPickUp)
         {
             if (!checklistManager.isChecked[0]) { StartCoroutine(checklistManager.ShowCheckoff(0)); }
-            
             if (petAi.hiding && !checklistManager.isChecked[2]) { StartCoroutine(checklistManager.ShowCheckoff(2)); }
             
-            StopCoroutine(QueueAgentReenable());
             transform.DOKill();
             interactor.PickUpObject(transform.gameObject);
         }
         else if (canPickUp)
         {
             canPickUp = false;
-            if (petAi.currentState == PetAI.State.Standby) { petAi.currentState = PetAI.State.Ragdoll; }
             interactor.DropObject();
             StartCoroutine(QueueAgentReenable());
         }

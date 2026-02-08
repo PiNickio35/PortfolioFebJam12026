@@ -21,6 +21,7 @@ public class TaskCompletion : MonoBehaviour {
     [SerializeField] private InteractionController interactionController;
     [SerializeField] private ChecklistManager checklistManager;
     [SerializeField] private Complications  complications;
+    [SerializeField] private UIMenuController uiMenuController;
     [SerializeField] private Animator anim;
     [SerializeField] private Collider petCollider;
     
@@ -35,7 +36,7 @@ public class TaskCompletion : MonoBehaviour {
                 if (!complications.lostEye.activeInHierarchy) { complications.LoseEye(); }
                 break;
             case 6:
-                Debug.Log("Death");
+                uiMenuController.ChangeWinStateUI(false);
                 break;
         }
     }
@@ -110,9 +111,10 @@ public class TaskCompletion : MonoBehaviour {
         
         // Hover over bowl and poop
         transform.DORotateQuaternion(litterbox.transform.rotation, 1f);
-        transform.DOMove(litterbox.transform.position + new Vector3(0, 0.15f, 0), 1f);
+        transform.DOMove(litterbox.transform.position + new Vector3(0, 0.5f, 0), 1f);
         yield return new WaitForSeconds(2f);
         candyPoop.SetActive(true);
+        petAi.currentState = PetAI.State.Ragdoll;
         yield return new WaitForSeconds(1f);
         
         // Realign
@@ -127,16 +129,17 @@ public class TaskCompletion : MonoBehaviour {
     {
         interactionController.DropObject();
         petAi.currentState = PetAI.State.Standby;
-        petCollider.enabled = false;
+        // petCollider.enabled = false;
         petInteraction.canPickUp = false;
         
+        anim.SetBool("isYawning", true);
         transform.DORotateQuaternion(bed.transform.rotation, 1f);
         transform.DOMove(bed.transform.position, 1f);
-        anim.SetBool("isYawning", true);
         yield return new WaitForSeconds(4f);
         anim.SetBool("isYawning", false);
         
         // End game
+        petAi.currentState = PetAI.State.Ragdoll;
         StartCoroutine(checklistManager.ShowCheckoff(4));
     }
 }

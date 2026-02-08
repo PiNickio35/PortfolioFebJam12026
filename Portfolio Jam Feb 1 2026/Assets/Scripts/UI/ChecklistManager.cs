@@ -18,6 +18,7 @@ public class ChecklistManager : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private PlayerInputHandler playerInputHandler;
+    [SerializeField] private UIMenuController uiMenuController;
     [SerializeField] private GameObject prompt;
     [SerializeField] private TextMeshProUGUI[] tasks;
     protected internal bool[] isChecked;
@@ -56,15 +57,10 @@ public class ChecklistManager : MonoBehaviour
             canPoop = false;
         }
         
-        if (isChecked[tasks.Length - 1])
-        {
-            // TODO: What happens when you win
-            Debug.Log("Player won!");
-        }
         else
         {
             int numChecked = isChecked.Count(check => check);
-            if (numChecked == tasks.Length - 1)
+            if (numChecked == tasks.Length - 2)
             {
                 canSleep = true;
             }
@@ -90,5 +86,10 @@ public class ChecklistManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         listVisible = false;
         slideDir = Vector3.down;
+        yield return new WaitForSeconds(2f);
+        if (isChecked[tasks.Length - 1])
+        {
+            uiMenuController.ChangeWinStateUI(true);
+        }
     }
 }

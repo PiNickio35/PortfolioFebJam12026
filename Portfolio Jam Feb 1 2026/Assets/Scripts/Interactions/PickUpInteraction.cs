@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Interactions
 {
     public class PickUpInteraction : BaseInteractable

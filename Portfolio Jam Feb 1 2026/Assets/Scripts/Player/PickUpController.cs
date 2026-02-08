@@ -12,7 +12,7 @@ public class PickUpController : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerInputHandler playerInputHandler;
     
-    private GameObject _heldObject;
+    protected internal GameObject _heldObject;
     private Rigidbody _heldObjectRigidBody;
     private bool _isClick;
 
@@ -69,7 +69,7 @@ public class PickUpController : MonoBehaviour
         }
     }
     
-    private void DropObject()
+    protected internal void DropObject()
     {
         _heldObjectRigidBody.useGravity = true;
         _heldObjectRigidBody.linearDamping = 1; // Should be drag so just check

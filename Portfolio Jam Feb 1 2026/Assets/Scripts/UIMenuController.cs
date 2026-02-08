@@ -47,7 +47,7 @@ public class UIMenuController : MonoBehaviour
             winStateCanvasGroup.interactable = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Time.timeScale = 0;
         });
-        
     }
 }

@@ -22,6 +22,7 @@ public class PetAI : MonoBehaviour
 
     [Header("Animation Parameters")]
     [SerializeField] private Animator anim;
+    private bool saidHi = false;
     protected internal bool inEvent = false;
     protected internal bool hiding = false;
     
@@ -59,9 +60,11 @@ public class PetAI : MonoBehaviour
 
     void CheckPickUp() 
     {
-        if ((idling || hiding) && model.transform.parent != gameObject.transform)
+        if ((!saidHi || idling || hiding) && model.transform.parent != gameObject.transform)
         {
             currentState = State.Ragdoll;
+            saidHi = true;
+            hiding = false;
         }
         
         if (idling && currentState != State.Idle)
@@ -137,10 +140,10 @@ public class PetAI : MonoBehaviour
         yield return new WaitForSeconds(8f);
         modelRb.constraints =  RigidbodyConstraints.None;
         model.transform.DOKill();
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1f);
         
         AlignAgentWithModel();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         currentState = State.Idle;
         petInteraction.canPickUp = true;
         inEvent = false;
@@ -153,11 +156,11 @@ public class PetAI : MonoBehaviour
         
         model.transform.DOLookAt(player.transform.position, 1f);
         anim.SetBool("isYawning", true);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         anim.SetBool("isYawning", false);
         
         AlignAgentWithModel();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         currentState = State.Idle;
         petInteraction.canPickUp = true;
         inEvent = false;
