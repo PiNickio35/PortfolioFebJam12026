@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class Complications : MonoBehaviour {
-    [Header("References")]
-    [SerializeField] protected internal GameObject lostEye;
+namespace Pet
+{
+    public class Complications : MonoBehaviour {
+        [Header("References")]
+        [SerializeField] protected internal GameObject lostEye;
     
-    public void LoseEye()
-    {
-        lostEye.SetActive(true);
+        public void LoseEye()
+        {
+            lostEye.SetActive(true);
+        }
     }
 }

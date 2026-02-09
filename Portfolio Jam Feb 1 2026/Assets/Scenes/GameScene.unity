@@ -736,6 +736,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bathroom Assets
       objectReference: {fileID: 0}
+    - target: {fileID: 1661239252111561062, guid: 640447ea62cb4704b9778772ed976f36, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -7230008799828349545, guid: 7c1260790f4f1db40bfdbdda128728e7, type: 3}
+    - target: {fileID: 2254608257519725447, guid: 640447ea62cb4704b9778772ed976f36, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e800cb017069e9748b1e3890bda4b2c1, type: 2}
     - target: {fileID: 3987338430401284954, guid: 640447ea62cb4704b9778772ed976f36, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.461

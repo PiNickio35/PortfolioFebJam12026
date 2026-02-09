@@ -3,7 +3,47 @@ guid: 7c1260790f4f1db40bfdbdda128728e7
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bathroom Sink.png
+    second: {fileID: 2100000, guid: 18b6552d319e80a4593ce3dde5f240c2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet Lid.png
+    second: {fileID: 2100000, guid: fb1a2e0f7662efd4fbe5f10cb301d882, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet.png
+    second: {fileID: 2100000, guid: e800cb017069e9748b1e3890bda4b2c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tub.png
+    second: {fileID: 2100000, guid: 9e2c6ac3bbe00184489001f3decf2c5a, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Bathroom Sink
+    second: {fileID: 2800000, guid: fc63922c9592f6e4e9b2eb8157fcb0ef, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Toilet
+    second: {fileID: 2800000, guid: 29881725a66479449967da4ee105baa0, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Toilet Lid
+    second: {fileID: 2800000, guid: 39834c0186e29dd49bd1172dfa23d318, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Tub
+    second: {fileID: 2800000, guid: ccec35220b7afaa4db6d2d814c5e139c, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
