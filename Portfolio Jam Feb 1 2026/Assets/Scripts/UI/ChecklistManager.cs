@@ -47,6 +47,20 @@ public class ChecklistManager : MonoBehaviour
         }
     }
 
+    public void ListOverride()
+    {
+        if (listVisible) 
+        {
+            listVisible = false;
+            slideDir = Vector3.down;
+        }
+        else 
+        {
+            listVisible = true;
+            slideDir = Vector3.up;
+        }
+    }
+
     void CheckOff(int taskId) 
     {
         tasks[taskId].fontStyle = FontStyles.Strikethrough;

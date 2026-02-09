@@ -25,6 +25,8 @@ public class FirstPersonController : MonoBehaviour
     
     private bool _isPaused;
 
+    private bool _inputOverride = false;
+
     private void Start()
     {
         playerInputHandler.onPause.AddListener(PauseMovement);
@@ -35,6 +37,7 @@ public class FirstPersonController : MonoBehaviour
     private void Update()
     {
         if (_isPaused) return;
+        if (_inputOverride) return;
         HandleRotation();
         HandleMovement();
     }
@@ -96,5 +99,18 @@ public class FirstPersonController : MonoBehaviour
     private void PauseMovement()
     {
         _isPaused = !_isPaused;
+    }
+
+    public void OverrideInput()
+    {
+        if (!_inputOverride)
+        {
+            _inputOverride = true;
+        }
+        else
+        {
+            _inputOverride = false;
+        }
+        
     }
 }
