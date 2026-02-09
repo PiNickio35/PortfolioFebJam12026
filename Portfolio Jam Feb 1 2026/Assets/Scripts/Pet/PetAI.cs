@@ -18,7 +18,7 @@ public class PetAI : MonoBehaviour
     [Header("Idling Parameters")]
     [SerializeField] private int randomMoveRadius;
     [SerializeField] private float randomMoveDelay;
-    bool idling;
+    protected internal bool idling;
 
     [Header("Animation Parameters")]
     [SerializeField] private Animator anim;

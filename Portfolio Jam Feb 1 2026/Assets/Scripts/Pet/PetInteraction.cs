@@ -45,7 +45,7 @@ public class PetInteraction : BaseInteractable {
 
     void OnCollisionEnter(Collision other)
     {
-        if (canPlaySound && !audioSource.isPlaying) { audioSource.PlayOneShot(thudSound); }
+        if (canPlaySound && !audioSource.isPlaying && !petAi.idling) { audioSource.PlayOneShot(thudSound); }
     }
 
     IEnumerator QueueAgentReenable()

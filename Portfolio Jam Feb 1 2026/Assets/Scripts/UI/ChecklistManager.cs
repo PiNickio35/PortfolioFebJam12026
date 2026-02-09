@@ -65,20 +65,10 @@ public class ChecklistManager : MonoBehaviour
     {
         tasks[taskId].fontStyle = FontStyles.Strikethrough;
         isChecked[taskId] = true;
-        
-        if (canPoop && taskId == 3)
-        {
-            canPoop = false;
-        }
-        
-        else
-        {
-            int numChecked = isChecked.Count(check => check);
-            if (numChecked == 3)
-            {
-                canSleep = true;
-            }
-        }
+
+        if (!canPoop || taskId != 3) return;
+        canPoop = false;
+        canSleep = true;
     }
 
     void AnimateChecklist()

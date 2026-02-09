@@ -10,10 +10,13 @@ namespace Interactions
         [SerializeField] private Vector3 closeRotation = new(0f, 0f, 0f);
         [SerializeField] private float rotationSpeed = 3f;
         
+        [SerializeField] private AudioSource audioSource;
+        
         private bool _isOpen;
 
         public override void Interact(InteractionController interactor)
         {
+            audioSource.Play();
             transform.DORotate(_isOpen ? closeRotation : openRotation, rotationSpeed);
 
             _isOpen = !_isOpen;
