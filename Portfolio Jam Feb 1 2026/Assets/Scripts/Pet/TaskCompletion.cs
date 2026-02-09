@@ -25,6 +25,9 @@ public class TaskCompletion : MonoBehaviour {
     [SerializeField] private UIMenuController uiMenuController;
     [SerializeField] private Animator anim;
     [SerializeField] private Collider petCollider;
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hideSound;
     
     void CheckIfComplicationApplies()
     {
@@ -99,6 +102,7 @@ public class TaskCompletion : MonoBehaviour {
         StartCoroutine(checklistManager.ShowCheckoff(1));
         anim.SetBool("isEating", false);
         yield return new WaitForSeconds(2f);
+        audioSource.PlayOneShot(hideSound);
         petAi.currentState = PetAI.State.Play;
         petInteraction.canPickUp = true;
         checklistManager.canPoop = true;

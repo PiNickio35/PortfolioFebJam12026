@@ -36,6 +36,9 @@ public class PetAI : MonoBehaviour
     [SerializeField] private GameObject[] hidingSpots;
     private Rigidbody modelRb;
 
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClips;
+
     void Awake()
     {
         modelRb = model.GetComponent<Rigidbody>();
@@ -155,6 +158,7 @@ public class PetAI : MonoBehaviour
         modelRb.constraints =  RigidbodyConstraints.FreezePosition;
         
         model.transform.DOLookAt(player.transform.position, 1f);
+        audioSource.PlayOneShot(audioClips[Random.Range(1, 3)]);
         anim.SetBool("isYawning", true);
         yield return new WaitForSeconds(2f);
         anim.SetBool("isYawning", false);
@@ -177,7 +181,11 @@ public class PetAI : MonoBehaviour
             if (isRandomEvent) { currentState = State.Event; break; }
 
             bool stayStill = Random.Range(0, 3) == 1;
-            if (stayStill) continue;
+            if (stayStill)
+            {
+                if (Random.Range(0, 2) == 1) audioSource.PlayOneShot(audioClips[0]);
+                continue;
+            }
             
             Vector3 randomDir = Random.insideUnitSphere * randomMoveRadius;
             randomDir += transform.position;
